@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Janova | Next-Gen Software, Billing & Attendance Solutions</title>
+    <title>Janova | Enterprise Software & Operations Suite</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #0b091a;
-            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-bg: rgba(255, 255, 255, 0.04);
             --border-color: rgba(255, 255, 255, 0.1);
             --primary-gradient: linear-gradient(135deg, #ff007f 0%, #7928ca 50%, #4f46e5 100%);
             --secondary-gradient: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
             --text-main: #ffffff;
             --text-muted: #a0aec0;
+            --success: #10b981;
         }
 
         * {
@@ -56,16 +57,20 @@
             letter-spacing: 1px;
         }
 
-        nav a {
+        nav button {
+            background: transparent;
+            border: none;
             color: var(--text-muted);
-            text-decoration: none;
-            margin-left: 30px;
-            font-weight: 400;
+            font-size: 16px;
+            margin-left: 25px;
+            cursor: pointer;
+            font-weight: 500;
             transition: color 0.3s;
         }
 
-        nav a:hover {
+        nav button:hover, nav button.active {
             color: var(--text-main);
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
         }
 
         .cta-btn {
@@ -73,7 +78,8 @@
             color: white;
             padding: 10px 24px;
             border-radius: 50px;
-            text-decoration: none;
+            border: none;
+            cursor: pointer;
             font-weight: 600;
             box-shadow: 0 4px 20px rgba(121, 40, 202, 0.4);
             transition: transform 0.2s, box-shadow 0.2s;
@@ -84,53 +90,57 @@
             box-shadow: 0 6px 25px rgba(121, 40, 202, 0.6);
         }
 
-        /* Hero Section */
-        .hero {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 100px 20px 60px;
-            max-width: 900px;
-            margin: 0 auto;
+        /* Main App Container */
+        .app-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
 
-        .hero h1 {
-            font-size: 56px;
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section Header */
+        .section-title {
+            font-size: 32px;
             font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
-        .hero h1 span {
+        .section-title span {
             background: var(--secondary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .hero p {
-            font-size: 18px;
+        .section-desc {
             color: var(--text-muted);
-            margin-bottom: 40px;
-            line-height: 1.6;
+            margin-bottom: 30px;
         }
 
-        /* 3D Tilt Cards Container */
-        .features {
+        /* 3D Grid & Cards */
+        .grid-3d {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
-            padding: 50px 8%;
-            max-width: 1300px;
-            margin: 0 auto;
         }
 
-        /* 3D Card Style */
-        .card {
+        .card-3d {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 20px;
-            padding: 40px 30px;
+            padding: 30px;
             position: relative;
             transform-style: preserve-3d;
             transform: perspective(1000px);
@@ -138,124 +148,312 @@
             backdrop-filter: blur(10px);
         }
 
-        .card:hover {
+        .card-3d:hover {
             border-color: rgba(255, 255, 255, 0.3);
         }
 
-        .card-content {
-            transform: translateZ(30px);
+        .card-inner {
+            transform: translateZ(25px);
         }
 
-        .card-icon {
-            font-size: 40px;
+        .price {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 15px 0;
+            color: #00f2fe;
+        }
+
+        /* Form Inputs & Controls */
+        .form-group {
             margin-bottom: 20px;
-            display: inline-block;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
-        .card h3 {
-            font-size: 24px;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .card p {
-            color: var(--text-muted);
-            font-size: 15px;
-            line-height: 1.5;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 40px;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-muted);
+        label {
+            display: block;
             font-size: 14px;
-            margin-top: 80px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
         }
 
-        /* Responsive */
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: #00f2fe;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        th, td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.02);
+            font-weight: 600;
+            color: #00f2fe;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        /* Responsive Layout */
         @media(max-width: 768px) {
-            .hero h1 { font-size: 36px; }
-            nav { display: none; }
+            nav button { margin-left: 10px; font-size: 14px; }
+            header { padding: 15px 5%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Header / Navbar -->
+    <!-- Navigation Bar -->
     <header>
         <div class="logo">JANOVA</div>
         <nav>
-            <a href="#features">Solutions</a>
-            <a href="#about">About</a>
-            <a href="#contact">Contact</a>
+            <button onclick="switchTab('sales')" class="active" id="btn-sales">Software Sales</button>
+            <button onclick="switchTab('billing')" id="btn-billing">Auto Billing</button>
+            <button onclick="switchTab('attendance')" id="btn-attendance">Smart Attendance</button>
         </nav>
-        <a href="#contact" class="cta-btn">Get Started</a>
+        <button class="cta-btn" onclick="switchTab('sales')">Launch App</button>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Empowering Enterprises with <span>Next-Gen Software Solutions</span></h1>
-        <p>Janova delivers high-performance ecosystem tools including lightning-fast software sales management, foolproof automated billing, and secure facial/biometric attendance tracking.</p>
-        <a href="#features" class="cta-btn" style="padding: 14px 32px; font-size: 16px;">Explore Features</a>
-    </section>
+    <div class="app-container">
 
-    <!-- 3D Interactive Feature Grid -->
-    <section class="features" id="features">
-        <!-- Card 1 -->
-        <div class="card" data-tilt>
-            <div class="card-content">
-                <div class="card-icon">⚡</div>
-                <h3>Software Sales Suite</h3>
-                <p>Streamline your license management, client onboarding, and SaaS subscriptions with real-time analytics and frictionless checkout pipes.</p>
+        <!-- TAB 1: SOFTWARE SALES -->
+        <div id="sales" class="tab-content active">
+            <h2 class="section-title">Software License <span>Sales Suite</span></h2>
+            <p class="section-desc">Choose your tier and instantly provision cloud licenses for your team.</p>
+            
+            <div class="grid-3d">
+                <div class="card-3d" data-tilt>
+                    <div class="card-inner">
+                        <h3>Starter CRM Pro</h3>
+                        <p style="color:var(--text-muted); font-size:14px;">Ideal for small boutique setups looking for automated customer tracking.</p>
+                        <div class="price">$49<span>/mo</span></div>
+                        <button class="cta-btn" style="width:100%; margin-top:10px;" onclick="buySoftware('Starter CRM Pro', 49)">Buy License</button>
+                    </div>
+                </div>
+
+                <div class="card-3d" data-tilt>
+                    <div class="card-inner">
+                        <h3>Enterprise ERP Suite</h3>
+                        <p style="color:var(--text-muted); font-size:14px;">Full stack resource planning tool with deep analytics and API integration.</p>
+                        <div class="price">$199<span>/mo</span></div>
+                        <button class="cta-btn" style="width:100%; margin-top:10px;" onclick="buySoftware('Enterprise ERP Suite', 199)">Buy License</button>
+                    </div>
+                </div>
+
+                <div class="card-3d" data-tilt>
+                    <div class="card-inner">
+                        <h3>Omni Billing Engine</h3>
+                        <p style="color:var(--text-muted); font-size:14px;">High-speed transactional invoicing engine built for multi-vendor portals.</p>
+                        <div class="price">$99<span>/mo</span></div>
+                        <button class="cta-btn" style="width:100%; margin-top:10px;" onclick="buySoftware('Omni Billing Engine', 99)">Buy License</button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Card 2 -->
-        <div class="card" data-tilt>
-            <div class="card-content">
-                <div class="card-icon">💳</div>
-                <h3>Automated Billing</h3>
-                <p>Generate dynamic invoices, track multi-currency transactions securely, and cut down payment processing cycles by up to 80%.</p>
+        <!-- TAB 2: AUTOMATED BILLING -->
+        <div id="billing" class="tab-content">
+            <h2 class="section-title">Instant Invoice & <span>Billing Generator</span></h2>
+            <p class="section-desc">Create itemized tax invoices instantly for clients with a single click.</p>
+
+            <div class="card-3d" style="max-width: 700px; margin: 0 auto;">
+                <div class="form-group">
+                    <label>Client / Company Name</label>
+                    <input type="text" id="clientName" placeholder="e.g. Acme Corp">
+                </div>
+                <div class="form-group">
+                    <label>Select Product / Service Package</label>
+                    <select id="billProduct">
+                        <option value="Starter CRM Pro">Starter CRM Pro ($49)</option>
+                        <option value="Enterprise ERP Suite">Enterprise ERP Suite ($199)</option>
+                        <option value="Omni Billing Engine">Omni Billing Engine ($9')</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Quantity / Seats</label>
+                    <input type="number" id="billQty" value="1" min="1">
+                </div>
+                <button class="cta-btn" style="width:100%; padding:14px;" onclick="generateInvoice()">Generate & Download Invoice</button>
+
+                <!-- Invoice Output Area -->
+                <div id="invoiceOutput" style="margin-top: 30px; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 10px; display: none;">
+                    <h3 style="border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 10px;">JANOVA TAX INVOICE</h3>
+                    <p id="invDetails" style="color:var(--text-muted); line-height: 1.6;"></p>
+                </div>
             </div>
         </div>
 
-        <!-- Card 3 -->
-        <div class="card" data-tilt>
-            <div class="card-content">
-                <div class="card-icon">📊</div>
-                <h3>Smart Attendance</h3>
-                <p>Cloud-synced tracking architecture designed for modern teams, supporting automated logs, shift configurations, and performance metrics.</p>
+        <!-- TAB 3: SMART ATTENDANCE -->
+        <div id="attendance" class="tab-content">
+            <h2 class="section-title">Smart Workforce <span>Attendance Tracker</span></h2>
+            <p class="section-desc">Monitor clock-ins, shift status, and live presence metrics across remote pods.</p>
+
+            <div class="card-3d" style="margin-bottom: 30px;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end;">
+                    <div class="form-group" style="flex: 1; min-width: 250px; margin-bottom: 0;">
+                        <label>Employee Name</label>
+                        <input type="text" id="empName" placeholder="Enter Full Name">
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 250px; margin-bottom: 0;">
+                        <label>Department</label>
+                        <select id="empDept">
+                            <option value="Engineering">Engineering</option>
+                            <option value="Sales & Growth">Sales & Growth</option>
+                            <option value="Customer Support">Customer Support</option>
+                        </select>
+                    </div>
+                    <button class="cta-btn" style="padding: 12px 30px;" onclick="markAttendance()">Clock In Now</button>
+                </div>
             </div>
+
+            <!-- Attendance Log Table -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Employee Name</th>
+                        <th>Department</th>
+                        <th>Timestamp</th>
+                        <th>Status</th>
+                    </tr>
+                 dulces
+                <tbody id="attendanceTableBody">
+                    <tr>
+                        <td>Alex Vance</td>
+                        <td>Engineering</td>
+                        <td>Today, 09:14 AM</td>
+                        <td><span class="badge">Present</span></td>
+                    </tr>
+                    <tr>
+                        <td>Sarah Connor</td>
+                        <td>Sales & Growth</td>
+                        <td>Today, 09:30 AM</td>
+                        <td><span class="badge">Present</span></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-    </section>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2026 Janova Technologies Inc. All rights reserved.</p>
-    </footer>
+    </div>
 
-    <!-- JavaScript for 3D Tilt Effect -->
+    <!-- JavaScript Application Logic & 3D Effect -->
     <script>
-        const cards = document.querySelectorAll('.card');
+        // Tab Switcher Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
 
+            document.getElementById(tabId).classList.add('active');
+            if(document.getElementById('btn-' + tabId)) {
+                document.getElementById('btn-' + tabId).classList.add('active');
+            }
+        }
+
+        // Software Sales Action simulator
+        function buySoftware(packageName, price) {
+            alert(`Redirecting to Janova Secure Checkout for "${packageName}" ($${price}/mo)...`);
+            switchTab('billing');
+            document.getElementById('billProduct').value = packageName;
+        }
+
+        // Automated Billing Generator Logic
+        function generateInvoice() {
+            const client = document.getElementById('clientName').value || 'Valued Client';
+            const product = document.getElementById('billProduct').value;
+            const qty = document.getElementById('billQty').value;
+            
+            let unitPrice = 49;
+            if(product.includes('Enterprise')) unitPrice = 199;
+            if(product.includes('Omni')) unitPrice = 99;
+
+            const total = unitPrice * qty;
+            const invoiceNo = 'JNV-' + Math.floor(100000 + Math.random() * 900000);
+            const dateStr = new Date().toLocaleDateString();
+
+            const outputHtml = `
+                <strong>Invoice ID:</strong> ${invoiceNo}<br>
+                <strong>Date:</strong> ${dateStr}<br>
+                <strong>Billed To:</strong> ${client}<br>
+                <strong>Item:</strong> ${product} (x${qty})<br>
+                <strong>Total Amount Payable:</strong> <span style="color:#00f2fe; font-size:18px; font-weight:bold;">$${total}.00 USD</span>
+            `;
+
+            document.getElementById('invDetails').innerHTML = outputHtml;
+            document.getElementById('invoiceOutput').style.display = 'block';
+        }
+
+        // Attendance Tracker Logic
+        function markAttendance() {
+            const name = document.getElementById('empName').value;
+            const dept = document.getElementById('empDept').value;
+
+            if(!name) {
+                alert('Please enter employee name.');
+                return;
+            }
+
+            const timeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const tbody = document.getElementById('attendanceTableBody');
+
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${name}</td>
+                <td>${dept}</td>
+                <td>Today, ${timeNow}</td>
+                <td><span class="badge">Present</span></td>
+            `;
+
+            tbody.prepend(newRow);
+            document.getElementById('empName').value = '';
+            alert(`Attendance successfully logged for ${name}!`);
+        }
+
+        // 3D Card Tilt Interaction
+        const cards = document.querySelectorAll('.card-3d');
         cards.forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left; //x position within card
-                const y = e.clientY - rect.top;  //y position within card
-
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
 
-                const rotateX = ((y - centerY) / centerY) * -12; // Max rotation deg
-                const rotateY = ((x - centerX) / centerX) * 12;
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
 
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
             });
 
             card.addEventListener('mouseleave', () => {
